@@ -13,36 +13,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Make sure that the temporary branch exists by checking all branch
+      # Ensure all branches are fetched
       - name: Fetch all branches
         run: git fetch --all
 
-      # Step 3: Check for differences between production and main
+      # Step: Check for differences between production and main
       - name: Check for differences
         id: check_diff
         run: |
           git diff --quiet origin/main..HEAD || echo "has_changes=true" >> $GITHUB_ENV
-  
-      - name: Create or update temporary branch from production
+
+      # Step: Force create or update the temporary branch from production
+      - name: Force create or update temporary branch from production
         if: env.has_changes == 'true'
         run: |
           git checkout production  # Checkout the production branch
           git pull origin production  # Ensure the latest changes are pulled
 
-          # Check if the sync/production-to-main branch exists
-          if git show-ref --verify --quiet refs/heads/sync/production-to-main; then
-            # If the branch exists, checkout and reset it to production
-            git checkout sync/production-to-main
-            git reset --hard production  # Reset it to match production exactly
-            git push --force origin sync/production-to-main  # Force push to the remote
-          else
-            # If the branch doesn't exist, create it from production
-            git checkout -b sync/production-to-main
-            git push origin sync/production-to-main  # Push the new branch to remote
-          fi
+          # Create or reset the sync/production-to-main branch from production
+          git checkout -B sync/production-to-main production  # Always create or reset the branch from production
+          git push --force origin sync/production-to-main  # Force push to remote
 
-
-      - name: Create a Pull Request
+      # Step: Create the Pull Request
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Auto created pull request
