@@ -17,22 +17,18 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
-      # Step: Check for differences between production and main
-      - name: Check for differences
-        id: check_diff
-        run: |
-          git diff --quiet origin/main..HEAD || echo "has_changes=true" >> $GITHUB_ENV
-
       # Step: Force create or update the temporary branch from production
       - name: Force create or update temporary branch from production
         if: env.has_changes == 'true'
         run: |
-          git checkout production  # Checkout the production branch
-          git pull origin production  # Ensure the latest changes are pulled
+          # Checkout production to ensure we start from the right state
+          git checkout production
+          git pull origin production
 
-          # Create or reset the sync/production-to-main branch from production
-          git checkout -B sync/production-to-main production  # Always create or reset the branch from production
-          git push --force origin sync/production-to-main  # Force push to remote
+          # Create or reset the sync branch based on production
+          git branch -D sync/production-to-main || true  # Delete if it exists
+          git checkout -b sync/production-to-main  # Create branch
+          git push --force origin sync/production-to-main  # Push to remote
 
       # Step: Create the Pull Request
       - name: Create Pull Request
