@@ -36,10 +36,14 @@ jobs:
           commit-message: Auto created pull request
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           branch: sync/production-to-main
 =======
           branch: sync/production
 >>>>>>> 1cddb6e (initial)
+=======
+          branch: sync/production-to-main
+>>>>>>> fe6e018 (initial)
           base: main
 =======
           branch: production
