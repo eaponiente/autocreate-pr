@@ -34,24 +34,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Auto created pull request
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
           branch: sync/production-to-main
-=======
-          branch: sync/production
->>>>>>> 1cddb6e (initial)
-=======
-          branch: sync/production-to-main
->>>>>>> fe6e018 (initial)
           base: main
-=======
-          branch: production
-<<<<<<< HEAD
->>>>>>> 4022225 (initial)
-=======
-          base: main
->>>>>>> 1183195 (initial)
           title: 'Sync `production` with `main`'
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
