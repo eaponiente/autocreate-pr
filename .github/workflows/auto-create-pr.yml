@@ -13,6 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+<<<<<<< HEAD
       # Ensure all branches are fetched
       - name: Fetch all branches
         run: git fetch --all
@@ -36,6 +37,13 @@ jobs:
           commit-message: Auto created pull request
           branch: sync/production-to-main
           base: main
+=======
+      - name: Create a Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: Auto created pull request
+          branch: production
+>>>>>>> 4022225 (initial)
           title: 'Sync `production` with `main`'
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
