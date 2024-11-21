@@ -13,11 +13,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Make sure that the temporary branch exists by checking all branch
+      - name: Fetch all branches
+        run: git fetch --all
+
+      # Step 3: Check for differences between production and main
+      - name: Check for differences
+        id: check_diff
+        run: |
+          git diff --quiet origin/main..HEAD || echo "has_changes=true" >> $GITHUB_ENV
+  
+      - name: Create temporary branch
+        if: env.has_changes == 'true'
+        run: |
+          git checkout -b sync/production-to-main
+          git push origin sync/production-to-main
+
+
       - name: Create a Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Auto created pull request
-          branch: sync/production
+          branch: sync/production-to-main
           base: main
           title: 'Sync `production` with `main`'
           body: |
