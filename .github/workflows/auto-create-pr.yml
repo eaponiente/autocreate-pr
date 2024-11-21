@@ -22,7 +22,11 @@ jobs:
           base: main
 =======
           branch: production
+<<<<<<< HEAD
 >>>>>>> 4022225 (initial)
+=======
+          base: main
+>>>>>>> 1183195 (initial)
           title: 'Sync `production` with `main`'
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
