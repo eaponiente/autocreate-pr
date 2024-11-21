@@ -18,7 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          head: production
+          branch: production
           title: 'Sync `production` with `main`'
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
