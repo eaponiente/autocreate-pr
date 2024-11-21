@@ -50,13 +50,23 @@ jobs:
         run: |
           git diff --quiet origin/main..HEAD || echo "has_changes=true" >> $GITHUB_ENV
   
-      - name: Create temporary branch
+      - name: Create or update temporary branch from production
         if: env.has_changes == 'true'
         run: |
           git checkout production  # Checkout the production branch
           git pull origin production  # Ensure the latest changes are pulled
-          git checkout -b sync/production-to-main
-          git push origin sync/production-to-main
+
+          # Check if the sync/production-to-main branch exists
+          if git show-ref --verify --quiet refs/heads/sync/production-to-main; then
+            # If the branch exists, checkout and reset it to production
+            git checkout sync/production-to-main
+            git reset --hard production  # Reset it to match production exactly
+            git push --force origin sync/production-to-main  # Force push to the remote
+          else
+            # If the branch doesn't exist, create it from production
+            git checkout -b sync/production-to-main
+            git push origin sync/production-to-main  # Push the new branch to remote
+          fi
 
 
 >>>>>>> fe6e018 (initial)
