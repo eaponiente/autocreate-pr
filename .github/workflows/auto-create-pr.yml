@@ -26,6 +26,8 @@ jobs:
       - name: Create temporary branch
         if: env.has_changes == 'true'
         run: |
+          git checkout production  # Checkout the production branch
+          git pull origin production  # Ensure the latest changes are pulled
           git checkout -b sync/production-to-main
           git push origin sync/production-to-main
 
