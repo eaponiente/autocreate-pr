@@ -1,0 +1,24 @@
+name: Auto Create PR from Production to Main
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create a Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          head: production
+          title: 'Sync `production` with `main`'
+          body: |
+            This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
