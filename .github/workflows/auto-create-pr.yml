@@ -19,7 +19,6 @@ jobs:
 
       # Step: Force create or update the temporary branch from production
       - name: Force create or update temporary branch from production
-        if: env.has_changes == 'true'
         run: |
           # Checkout production to ensure we start from the right state
           git checkout production
