@@ -20,15 +20,19 @@ jobs:
       # Reset or create the sync branch
       - name: Reset or create sync branch
         run: |
-          # Check if the remote branch already exists
+          # Start from production branch
+          git checkout production
+          git pull origin production
+
+          # Check if the local sync branch exists and delete it
+          git branch -D sync/production-to-main || true
+
+          # Check if the remote sync branch exists and delete it
           if git ls-remote --exit-code --heads origin sync/production-to-main; then
-            # If it exists, delete the remote branch
             git push origin --delete sync/production-to-main
           fi
 
-          # Checkout production and create/reset the sync branch
-          git checkout production
-          git pull origin production
+          # Create a fresh sync branch
           git checkout -b sync/production-to-main
           git push --force origin sync/production-to-main
 
