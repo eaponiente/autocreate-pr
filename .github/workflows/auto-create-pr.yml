@@ -3,7 +3,7 @@ name: Auto Create PR from Production to Main
 on:
   push:
     branches:
-      - production
+      - prod
 
 jobs:
   create-pr:
@@ -27,10 +27,10 @@ jobs:
           fi
 
           # Checkout production and create/reset the sync branch
-          git checkout production
-          git pull origin production
-          git checkout -b sync/production-to-main
-          git push --force origin sync/production-to-main
+          git checkout prod
+          git pull origin prod
+          git checkout -b sync/prod-to-main
+          git push --force origin sync/prod-to-main
 
 
       # Step: Create the Pull Request
