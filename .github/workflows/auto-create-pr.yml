@@ -34,7 +34,7 @@ jobs:
         with:
           commit-message: Auto created pull request
           branch: main
-          base: pr
+          base: sync/production-to-main
           title: 'Sync `production` with `main`'
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
