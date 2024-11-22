@@ -17,18 +17,23 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
-
-      # Step: Force create or update the temporary branch from production
-      - name: Force create or update temporary branch from production
-        if: env.has_changes == 'true'
+      # Reset or create the sync branch
+      - name: Reset or create sync branch
         run: |
-          git checkout production  # Checkout the production branch
-          git pull origin production  # Ensure the latest changes are pulled
+          # Check if the remote branch already exists
+          if git ls-remote --exit-code --heads origin sync/production-to-main; then
+            # If it exists, delete the remote branch
+            git push origin --delete sync/production-to-main
+          fi
 
-          # Create or reset the sync/production-to-main branch from production
-          git checkout -B sync/production-to-main production  # Always create or reset the branch from production
-          git push --force origin sync/production-to-main  # Force push to remote
+          # Checkout production and create/reset the sync branch
+          git checkout production
+          git pull origin production
+          git checkout -b sync/production-to-main
+          git push --force origin sync/production-to-main
 
+
+      # Step: Create the Pull Request
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
