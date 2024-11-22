@@ -21,9 +21,9 @@ jobs:
       - name: Reset or create sync branch
         run: |
           # Check if the remote branch already exists
-          if git ls-remote --exit-code --heads origin sync/prod-to-main; then
+          if git ls-remote --exit-code --heads origin sync/production-to-main; then
             # If it exists, delete the remote branch
-            git push origin --delete sync/prod-to-main
+            git push origin --delete sync/production-to-main
           fi
 
           # Checkout production and create/reset the sync branch
@@ -38,8 +38,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Auto created pull request
-          branch: main
-          base: sync/prod-to-main
+          branch: sync/prod-to-main
+          base: main
           title: 'Sync `production` with `main`'
+          reviewers: eaponiente
           body: |
             This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
