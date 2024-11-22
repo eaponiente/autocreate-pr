@@ -17,32 +17,12 @@ jobs:
       - name: Fetch all branches
         run: git fetch --all
 
-      # Reset or create the sync branch
-      - name: Reset or create sync branch
-        run: |
-          # Start from production branch
-          git checkout production
-          git pull origin production
-
-          # Check if the local sync branch exists and delete it
-          git branch -D sync/production-to-main || true
-
-          # Check if the remote sync branch exists and delete it
-          if git ls-remote --exit-code --heads origin sync/production-to-main; then
-            git push origin --delete sync/production-to-main
-          fi
-
-          # Create a fresh sync branch
-          git checkout -b sync/production-to-main
-          git push --force origin sync/production-to-main
-
-
       # Step: Create the Pull Request
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Auto created pull request
-          branch: sync/production-to-main
+          branch: pr
           base: main
           title: 'Sync `production` with `main`'
           body: |
