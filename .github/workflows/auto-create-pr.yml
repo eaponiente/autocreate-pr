@@ -1,45 +1,27 @@
-name: Auto Create PR from Production to Main
+name: Auto Create PR from Hotfix to Main
 
 on:
   push:
     branches:
-      - prod
+      - hotfix
+      - production
 
 jobs:
   create-pr:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:  
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Ensure all branches are fetched
-      - name: Fetch all branches
-        run: git fetch --all
-
-      # Reset or create the sync branch
-      - name: Reset or create sync branch
-        run: |
-          # Check if the remote branch already exists
-          if git ls-remote --exit-code --heads origin sync/prod-to-main; then
-            # If it exists, delete the remote branch
-            git push origin --delete sync/prod-to-main
-          fi
-
-          # Checkout production and create/reset the sync branch
-          git checkout prod
-          git pull origin prod
-          git checkout -b sync/prod-to-main
-          git push --force origin sync/prod-to-main
-
-
-      # Step: Create the Pull Request
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+      - name: Create main pull request
+        id: main
+        uses: repo-sync/pull-request@v2
         with:
-          commit-message: Auto created pull request
-          branch: main
-          base: sync/prod-to-main
-          title: 'Sync `production` with `main`'
-          body: |
-            This PR is automatically created to keep `main` branch in sync with changes merged into `production`.
+          destination_branch: "main"
+          pr_title: "Sync ${{ github.ref_name }} into main"
+          pr_allow_empty: true
+          pr_body: "**Automated pull request**"
+          pr_reviewer: eaponiente
+          pr_label: sync
+          github_token: ${{ secrets.GITHUB_TOKEN }}
