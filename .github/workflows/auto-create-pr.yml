@@ -13,11 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Create staging pull request
-        id: staging
+      - name: Create main pull request
+        id: main
         uses: repo-sync/pull-request@v2
         with:
-          destination_branch: "staging"
+          destination_branch: "main"
           pr_title: "Sync ${{ github.ref_name }} into staging"
           pr_allow_empty: true
           pr_body: "**Automated pull request**"
